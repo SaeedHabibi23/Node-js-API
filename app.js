@@ -2,7 +2,43 @@ const express = require('express');
 const {body , validationResult} = require('express-validator');
 let users = require('./users');
 const app = express();
+const morgan = require('morgan');
+const config = require('config');
+
+// Use Helemet ............................................................
+const helmet = require("helmet");
+// ...........................................................
+app.use(helmet());
+app.use(express.urlencoded({extended: true}));
+// برای پوست من استفاده میشود در بخش  url encoded که در خواست از این طریق ارسال مکینم
+
+//  Static Middleware .................................................................
+
+app.use(express.static('public'));
 app.use(express.json());
+
+
+console.log("Application Name:" , config.get("name"));
+console.log("Application version:" , config.get("version"));
+console.log("Application sms:" , config.get("SMS"));
+
+
+
+// if(app.get('env') === 'development'){
+//     console.log('morgan is active');
+//     app.use(morgan('tiny'));
+// }
+// .......................use middleware her ...........................
+//  next move control from one middleware to a nother middleware....................................
+// app.use((req , res , next)=>{
+//     console.log('midd 1');
+//     next();
+// });
+
+// app.use((req , res , next)=>{
+//     console.log('midd 2');
+//     next();
+// });
 
 app.get('/' , (req,res)=>{
     res.send('hello express');
@@ -34,6 +70,12 @@ app.get('/api/users' , (req, res)=>{
         message: "OK"
     });
 });
+
+// app.use((req , res , next)=>{
+//     console.log('midd 3');
+//     next();
+// });
+
 
 
 app.get('/api/users/:id' , (req, res)=>{
